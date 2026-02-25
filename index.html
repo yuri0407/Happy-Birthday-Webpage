@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spring Birthday</title>
+<title>Happy Birthday</title>
 
 <style>
 * {
@@ -19,6 +19,14 @@ body {
     color: #444;
 }
 
+/* ===== 비밀번호 ===== */
+.password-section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* ===== 배경 일러스트 ===== */
 .background-art {
     position: fixed;
@@ -28,6 +36,15 @@ body {
     z-index: 0;
 }
 
+.password-box {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+    
 .sun {
     position: absolute;
     top: 60px;
@@ -39,6 +56,10 @@ body {
     opacity: 0.6;
 }
 
+.password-box h2 {
+    margin-bottom: 20px;
+}
+
 .cloud {
     position: absolute;
     width: 150px;
@@ -46,6 +67,14 @@ body {
     background: white;
     border-radius: 50px;
     opacity: 0.7;
+}
+
+.password-box input {
+    padding: 12px;
+    width: 240px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
 }
 
 .cloud::before,
@@ -57,6 +86,18 @@ body {
     height: 80px;
     border-radius: 50%;
     top: -40px;
+}
+
+.password-box button {
+    margin-top: 20px;
+    padding: 12px; 30px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #ff9eb5, #ff7eb3);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .cloud::before { left: 10px; }
@@ -72,12 +113,21 @@ body {
     animation: float 6s ease-in-out infinite alternate;
 }
 
+.password-box button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 126, 179, 0.4);
+}
+
 .circle1 {
     width: 120px;
     height: 120px;
     background: #ffb6c1;
     bottom: 80px;
     left: 60px;
+}
+
+.hidden {
+    display: none;
 }
 
 .circle2 {
@@ -88,6 +138,7 @@ body {
     right: 120px;
 }
 
+/* ===== 스크롤 ===== */
 @keyframes float {
     from { transform: translateY(0); }
     to { transform: translateY(-20px); }
@@ -124,11 +175,24 @@ body {
     width: 100%;
 }
 
+/* ===== 첫 섹션 ===== */
+.birthday-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
 /* ===== 텍스트 애니메이션 ===== */
 .fade-up {
     opacity: 0;
     transform: translateY(30px);
     animation: fadeUp 1.5s ease forwards;
+}
+
+.birthday-sub {
+    font-size: 1.2rem;
+    color: #666;
+    opacity: 0;
 }
 
 .fade-delay {
@@ -140,6 +204,18 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* ===== 메시지 ===== */
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    font-size: 1rem;
+    resize: none;
+    margin-top: 20px;
 }
 
 /* ===== 버튼 ===== */
@@ -159,6 +235,11 @@ button:hover {
     box-shadow: 0 10px 25px rgba(255,126,179,0.4);
 }
 
+/* ===== SNS ===== */
+.sns-links {
+    margin-top: 30px;
+}
+
 textarea {
     width: 100%;
     height: 120px;
@@ -168,6 +249,17 @@ textarea {
     border: 1px solid #eee;
     resize: none;
 }
+
+.sns-links a {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 25px;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #a0e7e5, #7ed6d4);
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
 
 /* ===== 꽃잎 ===== */
 .petal {
@@ -181,6 +273,11 @@ textarea {
     z-index: 0;
 }
 
+.sns-links a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(126, 214, 212, 0.4);
+}
+
 @keyframes fall {
     to {
         transform: translateY(110vh);
@@ -191,6 +288,16 @@ textarea {
 </head>
 
 <body>
+
+<!-- 비밀번호 -->
+<div id="passwordPage" class="password-section">
+    <div class="password-box">
+        <h2>🎀 초대받은 분만 입장 가능해요 🎀</h2>
+        <input type="password" id="passwordInput" placeholder="비밀번호 입력">
+        <br>
+        <button onclick="checkPassword()">입장하기</button>
+    </div>
+</div>
 
 <!-- 🌸 배경 아트 -->
 <div class="background-art">
@@ -232,12 +339,35 @@ textarea {
 </div>
 
 <script>
+const correctPassword = "2026birthday";
+
+/* ===== 비밀번호 확인 ===== */
+function checkPassword() {
+    const input = document.getElementById("passwordInput").value;
+    if (input === correctPassword) {
+        document.getElementById("passwordPage").style.display = "none";
+
+        document.getElementById("mainContent").classlist.remove("hidden");
+        document.body.style.overflow = "auto";
+        document.getElementById("title").classList.add("show-animation");
+        document.getElementById("sub").classList.add("show-delay");
+        startPetals();
+    } else {
+        alert("비밀번호가 올바르지 않습니다.");
+    }
+}
+    
 const container = document.querySelector(".scroll-container");
 const sections = document.querySelectorAll(".section");
+
 let currentSection = 0;
 let isScrolling = false;
 
-/* ===== 부드러운 섹션 이동 ===== */
+/* ===== 휠 누적 설정 ===== */
+let wheelCount = 0;
+let lastDirection = 0;
+const scrollThreshold = 3; // 3번 스크롤 시 이동
+
 function scrollToSection(index) {
     if (index < 0 || index >= sections.length) return;
 
@@ -251,21 +381,29 @@ function scrollToSection(index) {
 
     setTimeout(() => {
         isScrolling = false;
-    }, 800); // 스크롤 지속 시간
+    }, 800);
 }
 
-/* ===== 마우스 휠 제어 ===== */
+/* ===== 마우스 휠 제어 (3번 누적) ===== */
 container.addEventListener("wheel", function(e) {
     if (isScrolling) return;
 
-    if (e.deltaY > 0) {
-        scrollToSection(currentSection + 1);
-    } else {
-        scrollToSection(currentSection - 1);
+    const direction = e.deltaY > 0 ? 1 : -1;
+
+    if (direction !== lastDirection) {
+        wheelCount = 0; // 방향 바뀌면 초기화
+    }
+
+    wheelCount++;
+    lastDirection = direction;
+
+    if (wheelCount >= scrollThreshold) {
+        scrollToSection(currentSection + direction);
+        wheelCount = 0;
     }
 });
 
-/* ===== 터치 스와이프 지원 ===== */
+/* ===== 모바일 터치 ===== */
 let touchStartY = 0;
 
 container.addEventListener("touchstart", function(e) {
