@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, #ffeef2, #fff9e6, #e6fff7);
+    color: #444;
+}
+
+/* 공통 섹션 스타일 */
+section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    padding: 20px;
+}
+
+/* 첫 화면 */
+.hero {
+    text-align: center;
+    overflow: hidden;
+}
+
+.birthday-text {
+    font-size: 3rem;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 2s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 꽃잎 애니메이션 */
+.petal {
+    position: absolute;
+    top: -50px;
+    width: 15px;
+    height: 15px;
+    background-color: #ffb6c1;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+}
+
+/* 메시지 섹션 */
+.message-section h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+textarea {
+    width: 300px;
+    height: 120px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+    font-size: 1rem;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 25px;
+    background-color: #ff9eb5;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #ff7fa0;
+}
+
+/* SNS 섹션 */
+.sns-section h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.sns-links a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: #a0e7e5;
+    text-decoration: none;
+    color: #333;
+    transition: 0.3s;
+}
+
+.sns-links a:hover {
+    background-color: #7ed6d4;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 첫 화면 -->
+<section class="hero">
+    <div class="birthday-text">🎉 생일을 진심으로 축하합니다 🎂</div>
+</section>
+
+<!-- 메시지 보내기 섹션 -->
+<section class="message-section">
+    <h2>축하 메시지 보내기</h2>
+    <textarea id="messageInput" placeholder="따뜻한 축하 메시지를 남겨주세요"></textarea>
+    <button onclick="sendMessage()">보내기</button>
+</section>
+
+<!-- SNS 섹션 -->
+<section class="sns-section">
+    <h2>SNS 방문하기</h2>
+    <div class="sns-links">
+        <a href="https://instagram.com/yu.mi_04" target="_blank">Instagram</a>
+    </div>
+</section>
+
+<script>
+// 꽃잎 생성
+function createPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+    petal.style.left = Math.random() * window.innerWidth + "px";
+    petal.style.animationDuration = (3 + Math.random() * 5) + "s";
+    petal.style.backgroundColor = ["#ffb6c1", "#ffd6e0", "#fff0a6"][Math.floor(Math.random() * 3)];
+    document.body.appendChild(petal);
+
+    setTimeout(() => {
+        petal.remove();
+    }, 8000);
+}
+
+setInterval(createPetal, 500);
+
+// 메시지 전송
+function sendMessage() {
+    const message = document.getElementById("messageInput").value.trim();
+    const phoneNumber = "01043217437"; // 여기에 실제 연락처 입력
+
+    if (message === "") {
+        alert("메시지를 입력해주세요.");
+        return;
+    }
+
+    const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+    window.location.href = smsLink;
+}
+</script>
+
+</body>
+</html>
