@@ -13,24 +13,10 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     background: linear-gradient(135deg, #ffeef2, #fff9e6, #e6fff7);
     color: #444;
-}
-
-/* 공통 섹션 스타일 */
-section {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: relative;
-    padding: 20px;
+    overflow: hidden;
 }
 
 /* 비밀번호 화면 */
@@ -49,16 +35,11 @@ section {
     text-align: center;
 }
 
-.password-box h2 {
-    margin-bottom: 20px;
-}
-
 .password-box input {
     padding: 10px;
     width: 220px;
     border-radius: 10px;
     border: 1px solid #ddd;
-    font-size: 1rem;
 }
 
 .password-box button {
@@ -68,26 +49,33 @@ section {
     border-radius: 25px;
     background-color: #ff9eb5;
     color: white;
-    font-size: 1rem;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.password-box button:hover {
-    background-color: #ff7fa0;
-}
-
-/* 숨김 처리 */
+/* 숨김 */
 .hidden {
     display: none;
 }
 
-/* 첫 화면 */
-.hero {
-    text-align: center;
-    overflow: hidden;
+/* 스크롤 컨테이너 */
+.scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
 }
 
+.section {
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    padding: 20px;
+}
+
+/* 첫 섹션 */
 .birthday-text {
     font-size: 3rem;
     font-weight: bold;
@@ -112,7 +100,6 @@ section {
     top: -50px;
     width: 15px;
     height: 15px;
-    background-color: #ffb6c1;
     border-radius: 50%;
     opacity: 0.8;
     animation: fall linear infinite;
@@ -125,12 +112,7 @@ section {
     }
 }
 
-/* 메시지 섹션 */
-.message-section h2 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-}
-
+/* 메시지 */
 textarea {
     width: 300px;
     height: 120px;
@@ -138,7 +120,6 @@ textarea {
     border-radius: 10px;
     border: 1px solid #ddd;
     resize: none;
-    font-size: 1rem;
 }
 
 button {
@@ -148,21 +129,10 @@ button {
     border-radius: 25px;
     background-color: #ff9eb5;
     color: white;
-    font-size: 1rem;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    background-color: #ff7fa0;
 }
 
 /* SNS */
-.sns-section h2 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-}
-
 .sns-links a {
     display: inline-block;
     margin: 10px;
@@ -171,18 +141,13 @@ button:hover {
     background-color: #a0e7e5;
     text-decoration: none;
     color: #333;
-    transition: 0.3s;
-}
-
-.sns-links a:hover {
-    background-color: #7ed6d4;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 비밀번호 화면 -->
+<!-- 비밀번호 -->
 <div id="passwordPage" class="password-section">
     <div class="password-box">
         <h2>비밀번호를 입력하세요</h2>
@@ -192,22 +157,25 @@ button:hover {
     </div>
 </div>
 
-<!-- 실제 생일 페이지 -->
-<div id="mainContent" class="hidden">
+<!-- 메인 콘텐츠 -->
+<div id="mainContent" class="hidden scroll-container">
 
-    <section class="hero">
+    <!-- 1. 축하 문구 -->
+    <section class="section">
         <div id="birthdayText" class="birthday-text">
             🎉 생일을 진심으로 축하합니다 🎂
         </div>
     </section>
 
-    <section class="message-section">
+    <!-- 2. 메시지 보내기 -->
+    <section class="section">
         <h2>축하 메시지 보내기</h2>
         <textarea id="messageInput" placeholder="따뜻한 축하 메시지를 남겨주세요"></textarea>
         <button onclick="sendMessage()">보내기</button>
     </section>
 
-    <section class="sns-section">
+    <!-- 3. SNS -->
+    <section class="section">
         <h2>SNS 방문하기</h2>
         <div class="sns-links">
             <a href="https://instagram.com" target="_blank">Instagram</a>
@@ -219,13 +187,14 @@ button:hover {
 </div>
 
 <script>
-const correctPassword = "2026birthday"; // 원하는 비밀번호로 변경
+const correctPassword = "2026birthday";
 
 function checkPassword() {
     const input = document.getElementById("passwordInput").value;
     if (input === correctPassword) {
         document.getElementById("passwordPage").style.display = "none";
         document.getElementById("mainContent").classList.remove("hidden");
+        document.body.style.overflow = "auto";
         document.getElementById("birthdayText").classList.add("show-animation");
         startPetals();
     } else {
@@ -239,7 +208,8 @@ function createPetal() {
     petal.classList.add("petal");
     petal.style.left = Math.random() * window.innerWidth + "px";
     petal.style.animationDuration = (3 + Math.random() * 5) + "s";
-    petal.style.backgroundColor = ["#ffb6c1", "#ffd6e0", "#fff0a6"][Math.floor(Math.random() * 3)];
+    petal.style.backgroundColor =
+        ["#ffb6c1", "#ffd6e0", "#fff0a6"][Math.floor(Math.random() * 3)];
     document.body.appendChild(petal);
 
     setTimeout(() => {
@@ -247,16 +217,14 @@ function createPetal() {
     }, 8000);
 }
 
-let petalInterval;
-
 function startPetals() {
-    petalInterval = setInterval(createPetal, 500);
+    setInterval(createPetal, 500);
 }
 
 /* 문자 전송 */
 function sendMessage() {
     const message = document.getElementById("messageInput").value.trim();
-    const phoneNumber = "01012345678"; // 실제 번호 입력
+    const phoneNumber = "01012345678";
 
     if (message === "") {
         alert("메시지를 입력해주세요.");
