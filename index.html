@@ -230,6 +230,33 @@ button {
     transition: 0.3s;
 }
 
+/* ===== 메모 게시판 ===== */
+.memo-board {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.memo {
+    width: 150px;
+    min-height: 120px;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: scale(0) rotate(0deg);
+    animation: popIn 0.4s ease forwards;
+    word-break: break-word;
+}
+
+@keyframes popIn {
+    to {
+        transform: scale(1) rotate(var(--rotate));
+    }
+}
+
 button:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(255,126,179,0.4);
@@ -323,8 +350,10 @@ textarea {
     <section class="section">
         <div class="card">
             <h2>💌 축하 메시지 보내기</h2>
-            <textarea id="messageInput" placeholder="메시지를 입력하세요"></textarea>
-            <button onclick="sendMessage()">보내기</button>
+            <textarea id="messageInput" placeholder="축하 메시지를 남겨주세요"></textarea>
+            <button onclick="addMemo()">업로드</button>
+
+            <div id="memoBoard" class="memo-board"></div>
         </div>
     </section>
 
@@ -438,15 +467,31 @@ function createPetal() {
 }
 setInterval(createPetal, 600);
 
-/* ===== 메시지 ===== */
-function sendMessage() {
-    const message = document.getElementById("messageInput").value.trim();
-    if(message === ""){
+function addMemo() {
+    const input = document.getElementById("messageInput");
+    const board = document.getElementById("memoBoard");
+    const text = input.value.trim();
+
+    if (text === "") {
         alert("메시지를 입력해주세요.");
         return;
     }
-    const smsLink = `sms:01012345678?body=${encodeURIComponent(message)}`;
-    window.location.href = smsLink;
+
+    const memo = document.createElement("div");
+    memo.classList.add("memo");
+    memo.textContent = text;
+
+    // 랜덤 색상
+    const colors = ["#fff6a6", "#ffd6e0", "#c8f7dc", "#d9e8ff"];
+    memo.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    // 랜덤 회전 각도
+    const rotate = (Math.random() * 10 - 5) + "deg";
+    memo.style.setProperty("--rotate", rotate);
+
+    board.appendChild(memo);
+
+    input.value = "";
 }
 
 function goSNS(){
